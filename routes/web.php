@@ -1,5 +1,7 @@
 <?php
 use Illuminate\Support\Facades\Route;
+use Illuminate\Http\Request;
+use App\Http\Controllers\GameController;
 
 /*
  |--------------------------------------------------------------------------
@@ -21,9 +23,7 @@ Auth::routes();
 Route::middleware('auth')->group(function () {
     Route::get('/home', 'HomeController@index')->name('home');
 
-    Route::get('/game/create', function () {
-        return view('game.create');
-    });
+    Route::resource('games', 'GameController');
 
     Route::get('/secret', function () {
         return "secret area found!";

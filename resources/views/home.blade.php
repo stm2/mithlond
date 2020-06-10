@@ -1,4 +1,5 @@
-@extends('layouts.app') @section('content')
+@extends('layouts.app')
+@section('content')
 <div class="container">
     <div class="row justify-content-center">
         <div class="col-md-8">
@@ -19,14 +20,14 @@
                     <p>You have {{ count($games) }} games.</p>
                     <ul>
                         @foreach ($games as $game)
-                        <li>{{ $game->name }} <a href="/game/edit/{{ $game->id }}">edit</a> <a
-                            href="/game/delete/{{ $game->id }}">delete</a></li>
+                        <li>{{ $game->name }} <a href="/games/{{ $game->id }}/edit">edit</a> <a
+                            href="/games/{{ $game->id }}/delete">delete</a></li>
                         <!--  -->
                         @endforeach
                     </ul>
                     @endif
                     <!--  -->
-                    <p><a href="/game/create">Create new game</a></p>
+                    <p><a href="/games/create">Create new game</a></p>
                 </div>
             </div>
         </div>

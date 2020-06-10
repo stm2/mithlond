@@ -46,11 +46,7 @@ class UserMenuTest extends TestCase
             'owner_id' => 4
         ]);
 
-        $response = $this->actingAs($user)
-            ->withSession([
-            'foo' => 'bar'
-        ])
-            ->get('/home');
+        $response = $this->actingAs($user)->get('/home');
 
         $response->assertStatus(200);
         $response->assertSeeText("You have 2 games.");

@@ -20,7 +20,7 @@ class CreateGamesTable extends Migration
             $table->foreignId('owner_id')
                 ->references('id')
                 ->on('users');
-            $table->string('url');
+            $table->string('url')->nullable();
             $table->string('email')->index();
             $table->timestamps();
         });
