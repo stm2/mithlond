@@ -34,7 +34,7 @@ class GameController extends Controller
      * @param \Illuminate\Http\Request $request
      * @return \Illuminate\Http\Response
      */
-    public function store(Request $request)
+    public function store(Request $request, Game $game)
     {
         $data = $this->validateGame($request);
 
@@ -91,9 +91,25 @@ class GameController extends Controller
      * @param \App\Game $game
      * @return \Illuminate\Http\Response
      */
-    public function destroy(Game $game)
+    public function destroy(Request $request, Game $game, $id = null)
     {
-        //
+        if (! empty($id))
+            $game = Game::find($id);
+        if (! empty($request->get('game_id')))
+            $game = Game::find($request->get('game_id'));
+
+        if ($request->getMethod() == 'DELETE') {
+            if ($request->exists('reject_delete')) {
+                // reject
+            } else if ($request->exists('confirm_delete')) {
+                $game->delete();
+            }
+        } else {
+            return view('game_confirm_delete', [
+                'game' => $game
+            ]);
+        }
+        return redirect('/home');
     }
 
     protected function validateGame(Request $request)

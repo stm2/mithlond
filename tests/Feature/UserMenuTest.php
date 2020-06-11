@@ -33,7 +33,7 @@ class UserMenuTest extends TestCase
         $response->assertStatus(200);
         $response->assertSeeText("My Games");
         $response->assertSeeText("You have no games.");
-        $response->assertSee('<a href="/game/create">Create new game</a>', false);
+        $response->assertSee('<a href="/games/create">Create new game</a>', false);
     }
 
     public function testDashboardListsGames()
