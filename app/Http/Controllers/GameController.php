@@ -8,6 +8,11 @@ use Illuminate\Support\Facades\Auth;
 class GameController extends Controller
 {
 
+    public function __construct()
+    {
+        $this->authorizeResource(Game::class, 'game');
+    }
+
     /**
      * Display a listing of the resource.
      *
@@ -53,7 +58,11 @@ class GameController extends Controller
      */
     public function show(Game $game)
     {
-        //
+        return view('game_show', [
+            'game' => $game,
+            'status' => 'Unknown',
+            'alerts' => []
+        ]);
     }
 
     /**
@@ -85,6 +94,20 @@ class GameController extends Controller
         return redirect('/home');
     }
 
+    public function confirm_delete(Request $request, Game $game, $id = null)
+    {
+        if (! empty($id))
+            $game = Game::find($id);
+        if (! empty($request->get('game_id')))
+            $game = Game::find($request->get('game_id'));
+
+        $this->authorize('delete', $game);
+
+        return view('game_confirm_delete', [
+            'game' => $game
+        ]);
+    }
+
     /**
      * Remove the specified resource from storage.
      *
@@ -104,11 +127,8 @@ class GameController extends Controller
             } else if ($request->exists('confirm_delete')) {
                 $game->delete();
             }
-        } else {
-            return view('game_confirm_delete', [
-                'game' => $game
-            ]);
         }
+
         return redirect('/home');
     }
 

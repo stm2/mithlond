@@ -49,6 +49,8 @@ class DeleteGameTest extends TestCase
         }
         if ($method == 'DELETE')
             return $response->delete('/games/' . $this->game->id, $params);
+        else if ($method == 'confirm')
+            return $response->get('/games/' . $this->game->id . "/confirm_delete", $params);
         else
             return $response->get('/games/' . $this->game->id . "/delete", $params);
     }
@@ -56,7 +58,7 @@ class DeleteGameTest extends TestCase
     function test_confirm_shows()
     {
         $this->init_db();
-        $response = $this->query([], 'get');
+        $response = $this->query([], 'confirm');
         $response->assertStatus(200)
             ->assertSee('Delete Game')
             ->assertSeeText("Do you really")
@@ -113,7 +115,7 @@ class DeleteGameTest extends TestCase
             'name' => 'My game'
         ]);
 
-        $response->assertStatus(200)->assertSeeText('Do you really');
+        $response->assertStatus(404);
     }
 
     function test_guest_cannot_delete()

@@ -2,7 +2,6 @@
 namespace Tests\Feature;
 
 use Illuminate\Foundation\Testing\RefreshDatabase;
-use Illuminate\Foundation\Testing\WithFaker;
 use Tests\TestCase;
 use App\Game;
 use App\User;
@@ -45,11 +44,13 @@ class UserMenuTest extends TestCase
             'name' => 'Test game 1',
             'owner_id' => 4
         ]);
+        $num = Game::where('owner_id', $user->id)->count();
+        $this->assertGreaterThan(1, $num);
 
         $response = $this->actingAs($user)->get('/home');
 
         $response->assertStatus(200);
-        $response->assertSeeText("You have 2 games.");
-        $response->assertSeeText("Test game 1 edit delete");
+        $response->assertSeeText("You have $num games.");
+        $response->assertSeeText("Test game 1 manage edit delete");
     }
 }

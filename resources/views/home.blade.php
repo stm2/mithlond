@@ -20,8 +20,8 @@
                     <p>You have {{ count($games) }} games.</p>
                     <ul>
                         @foreach ($games as $game)
-                        <li>{{ $game->name }} <a href="/games/{{ $game->id }}/edit">edit</a> <a
-                            href="/games/{{ $game->id }}/delete">delete</a></li>
+                        <li>{{ $game->name }} <a href="/games/{{ $game->id }}">manage</a> <a href="/games/{{ $game->id }}/edit">edit</a> <a
+                            href="/games/{{ $game->id }}/confirm_delete">delete</a></li>
                         <!--  -->
                         @endforeach
                     </ul>

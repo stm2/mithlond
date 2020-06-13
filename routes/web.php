@@ -24,7 +24,7 @@ Route::middleware('auth')->group(function () {
     Route::get('/home', 'HomeController@index')->name('home');
 
     Route::resource('games', 'GameController');
-    Route::get('/games/{id}/delete', 'GameController@destroy');
+    Route::get('/games/{id}/confirm_delete', 'GameController@confirm_delete');
 
     Route::get('/secret', function () {
         return "secret area found!";
