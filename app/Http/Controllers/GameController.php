@@ -1,9 +1,12 @@
 <?php
 namespace App\Http\Controllers;
 
+use App\Faction;
 use App\Game;
+use App\Order;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
+use Illuminate\Support\Facades\DB;
 
 class GameController extends Controller
 {
@@ -44,7 +47,7 @@ class GameController extends Controller
         $data = $this->validateGame($request);
 
         $game = new Game($data);
-        $game->owner_id = Auth::id();
+        $game->user_id = Auth::id();
         $game->save();
 
         return redirect('/home');
@@ -58,9 +61,29 @@ class GameController extends Controller
      */
     public function show(Game $game)
     {
+        $users = DB::table('users')->select('users.id')
+            ->join('factions', 'users.id', '=', 'factions.user_id')
+            ->join('games', 'games.id', '=', 'factions.game_id')
+            ->where('games.id', '=', $game->id)
+            ->distinct()
+            ->get();
+
+        $received = 0;
+
+        if ($game->currentRound()->count() > 0) {
+            $round = $game->currentRound()->first()->round;
+            foreach (Faction::where('game_id', $game->id)->cursor() as $faction) {
+                if (Order::where('faction_id', $faction->id)->where('round', $round)->count() > 0)
+                    $received ++;
+            }
+        }
+
         return view('game_show', [
             'game' => $game,
+            'players' => $users,
             'status' => 'Unknown',
+            'received' => $received,
+            'nmr' => $game->factions()->count() - $received,
             'alerts' => []
         ]);
     }
@@ -140,5 +163,12 @@ class GameController extends Controller
             'url' => 'nullable|url|max:255',
             'email' => 'required|email:rfc,strict,dns|max:255' // TODO email validation seems to be buggy as hell, e.g. "a@example" passes
         ]);
+    }
+
+    public function manage(Request $request, $game_id)
+    {
+        if ($request->exists('button_download_order')) {
+            return redirect('games/$game_id/orders');
+        }
     }
 }

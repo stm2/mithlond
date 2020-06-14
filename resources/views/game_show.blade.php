@@ -4,7 +4,7 @@
         <h1>Update Game</h1>
     </div>
     <div class="row ">
-        <form action="/TODO" method="post">
+        <form action="/games/{{$game->id}}/manage" method="post">
             @csrf {{-- @method('PUT') --}}
             <!--  -->
             <h1>Status of <em>{{$game->name}}</em></h1>
@@ -34,15 +34,15 @@
             </ul>
             @endif
             <p>
-                Active factions: 000 <a href="#">list</a>
+                Active factions: {{ $game->factions->count() }} <a href="#">list</a>
             </p>
-            <p>Active players: 000</p>
+            <p>Active players: {{ $players->count() }}</p>
             <button type="submit" name="button_message" class="btn btn-primary">Send message to all players</button>
             <p>
-                Orders sent: 000, confirmed: 000, nmr: 000 <a href="#">list</a>
+                Orders received: {{ $received }}, nmr: {{ $nmr }} <a href="#">manage</a>
             </p>
             <p>
-                New applications: 000 <a href="#">list</a>
+                New applications: 000 <a href="#">manage</a>
             </p>
             <button type="submit" name="button_close" class="btn btn-primary">Close order reception</button>
             <button type="submit" name="button_download_orders" class="btn btn-primary">Download

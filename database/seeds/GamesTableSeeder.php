@@ -14,11 +14,11 @@ class GamesTableSeeder extends Seeder
     public function run()
     {
         factory(App\Game::class, 2)->create([
-            'owner_id' => 1
+            'user_id' => 1
         ]);
 
         factory(App\Game::class, 1)->create([
-            'owner_id' => 2
+            'user_id' => 2
         ]);
 
         factory(App\Game::class, 4)->create();

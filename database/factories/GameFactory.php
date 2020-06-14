@@ -7,7 +7,7 @@ use Faker\Generator as Faker;
 $factory->define(Game::class, function (Faker $faker) {
     return [
         'name' => $faker->domainWord,
-        'owner_id' => function () {
+        'user_id' => function () {
             return App\User::inRandomOrder()->first()->id;
         },
         'url' => $faker->url,

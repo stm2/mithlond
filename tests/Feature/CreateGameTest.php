@@ -26,7 +26,7 @@ class CreateGameTest extends TestCase
 
         $this->assertDatabaseHas('games', [
             'name' => 'My game',
-            'owner_id' => $user->id
+            'user_id' => $user->id
         ]);
 
         $response->assertStatus(302)->assertHeader('Location', url('/home'));
@@ -98,7 +98,7 @@ class CreateGameTest extends TestCase
 
         $this->assertDatabaseMissing('games', [
             'name' => 'My game',
-            'owner_id' => $user->id
+            'user_id' => $user->id
         ]);
 
         $response->assertStatus(302)->assertHeader('Location', url('/login'));

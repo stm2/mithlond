@@ -12,7 +12,7 @@
                     @endif
 
                     <h2>My Games</h2>
-                    @if (count($games) <1)
+                    @if (count($games) < 1)
                     <!--  -->
                     <p>You have no games.</p>
                     <!--  -->
@@ -28,6 +28,24 @@
                     @endif
                     <!--  -->
                     <p><a href="/games/create">Create new game</a></p>
+
+
+                    <h2>My Factions</h2>
+                    @if (count($factions) < 1)
+                    <!--  -->
+                    <p>You have no factions.</p>
+                    <!--  -->
+                    @else
+                    <p>You have {{ count($factions) }} factions.</p>
+                    <ul>
+                        @foreach ($factions as $faction)
+                        <li>{{ $faction->name }} ({{ $faction->number }}): game <a href="/games/{{ $faction->game->id}}">{{ $faction->game->name }}</a>, <a href="/faction/{{ $faction->id }}/orders/send }}">send orders</a>, <a href="/faction/{{ $faction->id }}/reports }}">reports</a></li>
+                        <!--  -->
+                        @endforeach
+                    </ul>
+                    @endif
+                    <!--  -->
+                    <p><a href="/factions/apply">Apply for a game</a></p>
                 </div>
             </div>
         </div>

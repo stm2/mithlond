@@ -17,7 +17,7 @@ class CreateGamesTable extends Migration
             $table->id();
             $table->string('name')->index();
             $table->text('description')->nullable();
-            $table->foreignId('owner_id')
+            $table->foreignId('user_id')
                 ->references('id')
                 ->on('users');
             $table->string('url')->nullable();

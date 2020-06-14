@@ -2,6 +2,7 @@
 namespace App;
 
 use Illuminate\Database\Eloquent\Model;
+use Illuminate\Support\Facades\DB;
 
 class Game extends Model
 {
@@ -31,5 +32,10 @@ class Game extends Model
     public function roundsNotSent()
     {
         return $this->rounds()->whereNull('sent');
+    }
+
+    public function factions()
+    {
+        return $this->hasMany('App\Faction');
     }
 }

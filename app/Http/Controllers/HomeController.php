@@ -23,9 +23,11 @@ class HomeController extends Controller
      */
     public function index()
     {
-        $games = \App\Game::where('owner_id', Auth::id())->get();
+        $games = \App\Game::where('user_id', Auth::id())->get();
+        $factions = \App\Faction::where('user_id', Auth::id())->get();
         return view('home', [
-            'games' => $games
+            'games' => $games,
+            'factions' => $factions
         ]);
     }
 }

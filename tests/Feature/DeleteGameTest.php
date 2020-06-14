@@ -23,7 +23,7 @@ class DeleteGameTest extends TestCase
     function init_db()
     {
         $this->user = factory(User::class)->create();
-        $this->valid_game['owner_id'] = $this->user->id;
+        $this->valid_game['user_id'] = $this->user->id;
         $this->game = factory(Game::class)->create($this->valid_game);
 
         // $response = $this;

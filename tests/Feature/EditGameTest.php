@@ -23,7 +23,7 @@ class EditGameTest extends TestCase
     function user_response(array $post = null, bool $as_user = true)
     {
         $this->user = factory(User::class)->create();
-        $this->valid_game['owner_id'] = $this->user->id;
+        $this->valid_game['user_id'] = $this->user->id;
         $this->game = factory(Game::class)->create($this->valid_game);
 
         $response = $this;
