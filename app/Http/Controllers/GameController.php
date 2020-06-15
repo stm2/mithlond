@@ -121,8 +121,8 @@ class GameController extends Controller
     {
         if (! empty($id))
             $game = Game::find($id);
-        if (! empty($request->get('game_id')))
-            $game = Game::find($request->get('game_id'));
+        if (! empty($request->input('game_id')))
+            $game = Game::find($request->input('game_id'));
 
         $this->authorize('delete', $game);
 
@@ -141,8 +141,8 @@ class GameController extends Controller
     {
         if (! empty($id))
             $game = Game::find($id);
-        if (! empty($request->get('game_id')))
-            $game = Game::find($request->get('game_id'));
+        if (! empty($request->input('game_id')))
+            $game = Game::find($request->input('game_id'));
 
         if ($request->getMethod() == 'DELETE') {
             if ($request->exists('reject_delete')) {
@@ -161,14 +161,16 @@ class GameController extends Controller
             'name' => 'required|max:255',
             'description' => 'max:5000',
             'url' => 'nullable|url|max:255',
-            'email' => 'required|email:rfc,strict,dns|max:255' // TODO email validation seems to be buggy as hell, e.g. "a@example" passes
+            'email' => 'required|email:rfc,strict,dns|max:255' // TODO email validation seems to be off, e.g. "a@example" passes
         ]);
     }
 
     public function manage(Request $request, $game_id)
     {
-        if ($request->exists('button_download_order')) {
-            return redirect('games/$game_id/orders');
+        if ($request->exists('button_download_orders')) {
+            return redirect("games/$game_id/orders");
         }
+        return "manage";
+        // return redirect('/games/' . $game_id);
     }
 }

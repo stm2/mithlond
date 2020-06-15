@@ -10928,3 +10928,10 @@ a.text-dark:focus {
   }
 }
 
+a[download]::before {
+  content: url("/images/icons/download-16.svg");
+  height: 2em;
+  position: relative;
+  top: 0em;
+  padding-right: .5ex;
+}
