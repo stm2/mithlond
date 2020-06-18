@@ -58,9 +58,10 @@ class DeleteGameTest extends TestCase
     function test_confirm_shows()
     {
         $this->init_db();
+
         $response = $this->query([], 'confirm');
         $response->assertStatus(200)
-            ->assertSee('Delete Game')
+            ->assertSee('Confirm Deletion')
             ->assertSeeText("Do you really")
             ->assertSee('Yes')
             ->assertSee("No");

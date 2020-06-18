@@ -39,7 +39,7 @@
                     <p>You have {{ count($factions) }} factions.</p>
                     <ul>
                         @foreach ($factions as $faction)
-                        <li>{{ $faction->name }} ({{ $faction->number }}): game <a href="/games/{{ $faction->game->id}}">{{ $faction->game->name }}</a>, <a href="/faction/{{ $faction->id }}/orders/send }}">send orders</a>, <a href="/faction/{{ $faction->id }}/reports }}">reports</a></li>
+                        <li>{{ $faction->name }} ({{ $faction->number }}): game <a href="/games/{{ $faction->game->id}}">{{ $faction->game->name }}</a>, <a href="/factions/{{ $faction->id }}/orders/create">send orders</a>, <a href="/faction/{{ $faction->id }}/reports">reports</a></li>
                         <!--  -->
                         @endforeach
                     </ul>

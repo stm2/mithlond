@@ -2,10 +2,12 @@
 namespace Tests\Feature;
 
 use App\Game;
+use App\Order;
 use App\User;
 use Illuminate\Foundation\Testing\RefreshDatabase;
-use Illuminate\Foundation\Testing\WithFaker;
 use Tests\TestCase;
+use Illuminate\Testing\TestResponse;
+use App\Faction;
 
 class GameStatusTest extends TestCase
 {
@@ -28,13 +30,22 @@ class GameStatusTest extends TestCase
 
         $response->assertSeeText("Status of " . $game->name);
         $response->assertSeeText("Status: " . $game->status);
-        $response->assertSeeText("Next turn: " . $game->currentRound->round . " (" . $game->currentRound->deadline . ") edit add");
+        $response->assertSeeTextInOrder([
+            "Next turn: " . $game->currentRound->round,
+            "(" . $game->currentRound->deadline . ")",
+            "edit",
+            "add"
+        ]);
+
         $response->assertSeeText($game->roundsSent->count() . " / " . $game->rounds->count() . " turns");
 
         $response->assertSeeText("Active factions: " . $game->factions->count());
         $response->assertSeeText("Active players: 2");
 
         $response->assertSeeText("Orders received: 1, nmr: 2");
+
+        $content = $response->getContent();
+        $this->assertRegExp("#<a[^>]*href=\"/games/2/orders\"[^>]*>Download orders</a>#", $content);
     }
 
     public function testNonOwnerSeesNothing()
@@ -96,5 +107,53 @@ class GameStatusTest extends TestCase
         $this->assertEquals($user->id, $game->user_id);
 
         $response->assertSeeText("Orders received: 0, nmr: 0");
+    }
+
+    public function testManage()
+    {
+        $this->fail();
+    }
+
+    public function testManageUnauthorized()
+    {
+        $this->fail();
+    }
+
+    public function testDownloadOrders()
+    {
+        $this->seed();
+        $user = User::find(1);
+        $allOrders = "";
+        $faction = Faction::find(1);
+        $this->assertEquals(2, $faction->game_id);
+        for ($i = 1; $i <= 2; ++ $i) {
+            $order = Order::find($i);
+            $this->assertEquals($faction->id, $order->faction_id);
+            $allOrders .= $order->orders;
+            $allOrders .= "\n";
+        }
+        $this->assertGreaterThan(10, strlen($allOrders));
+
+        $response = $this->actingAs($user)->get('/games/2/orders');
+
+        $response->assertStatus(200)->assertSee($allOrders);
+    }
+
+    public function testDownloadUnauthorizedOrders()
+    {
+        $this->seed();
+        $user = User::find(2);
+
+        $faction = Faction::find(1);
+        $this->assertEquals(2, $faction->game_id);
+        $this->assertNotEquals($faction->game->user_id, $user->id);
+        $this->assertEquals($faction->game->user_id, 1);
+
+        $game = Game::find(2);
+        $this->assertNotEquals($game->user_id, $user->id);
+
+        $response = $this->actingAs($user)->get('/games/2/orders');
+
+        $response->assertStatus(403);
     }
 }
