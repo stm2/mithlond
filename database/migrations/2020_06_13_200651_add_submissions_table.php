@@ -3,7 +3,7 @@ use Illuminate\Database\Migrations\Migration;
 use Illuminate\Database\Schema\Blueprint;
 use Illuminate\Support\Facades\Schema;
 
-class AddOrdersTable extends Migration
+class AddSubmissionsTable extends Migration
 {
 
     /**
@@ -13,11 +13,11 @@ class AddOrdersTable extends Migration
      */
     public function up()
     {
-        Schema::create('orders', function (Blueprint $table) {
+        Schema::create('submissions', function (Blueprint $table) {
             $table->id();
             $table->foreignId('faction_id')->constrained();
             $table->integer('round')->unsigned();
-            $table->text('orders');
+            $table->text('text');
             $table->timestamps();
         });
     }
@@ -29,6 +29,6 @@ class AddOrdersTable extends Migration
      */
     public function down()
     {
-        Schema::dropIfExists('orders');
+        Schema::dropIfExists('submissions');
     }
 }

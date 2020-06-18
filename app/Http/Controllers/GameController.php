@@ -3,7 +3,7 @@ namespace App\Http\Controllers;
 
 use App\Faction;
 use App\Game;
-use App\Order;
+use App\Submission;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\DB;
@@ -73,7 +73,7 @@ class GameController extends Controller
         if ($game->currentRound()->count() > 0) {
             $round = $game->currentRound()->first()->round;
             foreach (Faction::where('game_id', $game->id)->cursor() as $faction) {
-                if (Order::where('faction_id', $faction->id)->where('round', $round)->count() > 0)
+                if (Submission::where('faction_id', $faction->id)->where('round', $round)->count() > 0)
                     $received ++;
             }
         }
@@ -167,8 +167,8 @@ class GameController extends Controller
 
     public function manage(Request $request, $game_id)
     {
-        if ($request->exists('button_download_orders')) {
-            return redirect("games/$game_id/orders");
+        if ($request->exists('button_download_submissions')) {
+            return redirect("games/$game_id/submissions");
         }
         return "manage";
         // return redirect('/games/' . $game_id);

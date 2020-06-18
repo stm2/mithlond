@@ -39,8 +39,8 @@ class Game extends Model
         return $this->hasMany('App\Faction');
     }
 
-    public function orders()
+    public function submissions()
     {
-        return $this->hasManyThrough('App\Order', 'App\Faction');
+        return $this->hasManyThrough('App\Submission', 'App\Faction');
     }
 }

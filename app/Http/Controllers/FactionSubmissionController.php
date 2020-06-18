@@ -3,16 +3,16 @@ namespace App\Http\Controllers;
 
 use App\Faction;
 use App\Game;
-use App\Order;
+use App\Submission;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
 
-class FactionOrderController extends Controller
+class FactionSubmissionController extends Controller
 {
 
     public function __construct()
     {
-        $this->authorizeResource(Order::class, 'order');
+        $this->authorizeResource(Submission::class, 'submission');
     }
 
     /**
@@ -32,14 +32,14 @@ class FactionOrderController extends Controller
      */
     public function create(Faction $faction)
     {
-        $orders = new Order();
-        $orders->faction_id = $faction->id;
+        $submissions = new Submission();
+        $submissions->faction_id = $faction->id;
 
         $this->authorize('create', [
-            $orders
+            $submissions
         ]);
 
-        return view('order_create', [
+        return view('submission_create', [
             'faction' => $faction
         ]);
     }
@@ -52,18 +52,18 @@ class FactionOrderController extends Controller
      */
     public function store(Request $request, Faction $faction)
     {
-        $data = $this->validateOrder($request);
+        $data = $this->validateSubmission($request);
 
-        $orders = new Order($data);
-        $orders->faction_id = $faction->id;
+        $submission = new Submission($data);
+        $submission->faction_id = $faction->id;
         // TODO is it always the current round?
-        $orders->round = $faction->game->currentRound->round;
+        $submission->round = $faction->game->currentRound->round;
 
         $this->authorize('create', [
-            $orders
+            $submission
         ]);
 
-        $orders->save();
+        $submission->save();
 
         return redirect('/home');
     }
@@ -71,10 +71,10 @@ class FactionOrderController extends Controller
     /**
      * Display the specified resource.
      *
-     * @param \App\Order $order
+     * @param \App\Submission $submission
      * @return \Illuminate\Http\Response
      */
-    public function show(Faction $faction, Order $order)
+    public function show(Faction $faction, Submission $submission)
     {
         return "show";
     }
@@ -82,10 +82,10 @@ class FactionOrderController extends Controller
     /**
      * Show the form for editing the specified resource.
      *
-     * @param \App\Order $order
+     * @param \App\Submission $submission
      * @return \Illuminate\Http\Response
      */
-    public function edit(Faction $faction, Order $order)
+    public function edit(Faction $faction, Submission $submission)
     {
         return "edit";
     }
@@ -94,10 +94,10 @@ class FactionOrderController extends Controller
      * Update the specified resource in storage.
      *
      * @param \Illuminate\Http\Request $request
-     * @param \App\Order $order
+     * @param \App\Submission $submission
      * @return \Illuminate\Http\Response
      */
-    public function update(Request $request, Faction $faction, Order $order)
+    public function update(Request $request, Faction $faction, Submission $submission)
     {
         return "update";
     }
@@ -105,18 +105,18 @@ class FactionOrderController extends Controller
     /**
      * Remove the specified resource from storage.
      *
-     * @param \App\Order $order
+     * @param \App\Submission $submission
      * @return \Illuminate\Http\Response
      */
-    public function destroy(Order $order)
+    public function destroy(Submission $submission)
     {
         return "destroy";
     }
 
-    protected function validateOrder(Request $request)
+    protected function validateSubmission(Request $request)
     {
         return $request->validate([
-            'orders' => 'required'
+            'text' => 'required'
         ]);
     }
 }

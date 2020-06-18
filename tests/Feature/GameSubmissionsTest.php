@@ -3,13 +3,13 @@ namespace Tests\Feature;
 
 use App\Faction;
 use App\Game;
-use App\Order;
+use App\Submission;
 use App\User;
 use Illuminate\Foundation\Testing\RefreshDatabase;
 use Illuminate\Foundation\Testing\WithFaker;
 use Tests\TestCase;
 
-class GameOrdersTest extends TestCase
+class GameSubmissionsTest extends TestCase
 {
 
     use RefreshDatabase;
@@ -20,30 +20,30 @@ class GameOrdersTest extends TestCase
         $user = User::find(1);
         $faction = Faction::find(1);
 
-        $response = $this->actingAs($user)->get('/factions/1/orders/create');
+        $response = $this->actingAs($user)->get('/factions/1/submissions/create');
 
         $response->assertStatus(200);
         $response->assertSee("Upload orders for faction " . $faction->name);
     }
 
-    public function testSubmitOrders()
+    public function testSubmitSubmissions()
     {
         $this->seed();
         $user = User::find(1);
 
         $submission = [
-            'orders' => "Hello, Orders!"
+            'text' => "Hello, Submissions!"
         ];
-        $response = $this->actingAs($user)->post('/factions/1/orders', $submission);
+        $response = $this->actingAs($user)->post('/factions/1/submissions', $submission);
 
         $response->assertStatus(302)->assertHeader('Location', url('/home'));
 
-        $this->assertDatabaseHas('orders', $submission);
-        $order = Order::find(Order::all()->count());
-        $this->assertEquals(1, $order->faction_id);
+        $this->assertDatabaseHas('submissions', $submission);
+        $submission = Submission::find(Submission::all()->count());
+        $this->assertEquals(1, $submission->faction_id);
 
         $game = Game::find(Faction::find(1)->game_id);
-        $this->assertEquals($game->currentRound->round, $order->round);
+        $this->assertEquals($game->currentRound->round, $submission->round);
     }
 
     public function testUserAuthorized()
@@ -52,12 +52,12 @@ class GameOrdersTest extends TestCase
         $user = User::find(2);
 
         $submission = [
-            'orders' => "Hello, Orders!"
+            'text' => "Hello, Submissions!"
         ];
-        $response = $this->actingAs($user)->post('/factions/1/orders', $submission);
+        $response = $this->actingAs($user)->post('/factions/1/submissions', $submission);
 
         $response->assertStatus(403);
 
-        $this->assertDatabaseMissing('orders', $submission);
+        $this->assertDatabaseMissing('submissions', $submission);
     }
 }

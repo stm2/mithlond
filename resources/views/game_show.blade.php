@@ -50,7 +50,7 @@
                         <p>
                             @isset ($game->currentRound) <a
                                 download="orders{{ $game->currentRound }}.txt"
-                                href="/games/{{ $game->id }}/orders">Download orders</a>
+                                href="/games/{{ $game->id }}/submissions">Download orders</a>
                             <!--  -->
                             @else No current turn {{ $game->currentRound }}
                             <!--  -->

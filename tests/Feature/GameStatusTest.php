@@ -2,7 +2,7 @@
 namespace Tests\Feature;
 
 use App\Game;
-use App\Order;
+use App\Submission;
 use App\User;
 use Illuminate\Foundation\Testing\RefreshDatabase;
 use Tests\TestCase;
@@ -45,7 +45,7 @@ class GameStatusTest extends TestCase
         $response->assertSeeText("Orders received: 1, nmr: 2");
 
         $content = $response->getContent();
-        $this->assertRegExp("#<a[^>]*href=\"/games/2/orders\"[^>]*>Download orders</a>#", $content);
+        $this->assertRegExp("#<a[^>]*href=\"/games/2/submissions\"[^>]*>Download orders</a>#", $content);
     }
 
     public function testNonOwnerSeesNothing()
@@ -95,7 +95,7 @@ class GameStatusTest extends TestCase
         $response->assertSeeText($game->roundsSent->count() . " / " . $game->rounds->count() . " turns");
     }
 
-    public function testNoOrders()
+    public function testNoSubmissions()
     {
         $this->seed();
 
@@ -119,27 +119,27 @@ class GameStatusTest extends TestCase
         $this->fail();
     }
 
-    public function testDownloadOrders()
+    public function testDownloadSubmissions()
     {
         $this->seed();
         $user = User::find(1);
-        $allOrders = "";
+        $allSubmissions = "";
         $faction = Faction::find(1);
         $this->assertEquals(2, $faction->game_id);
         for ($i = 1; $i <= 2; ++ $i) {
-            $order = Order::find($i);
-            $this->assertEquals($faction->id, $order->faction_id);
-            $allOrders .= $order->orders;
-            $allOrders .= "\n";
+            $submission = Submission::find($i);
+            $this->assertEquals($faction->id, $submission->faction_id);
+            $allSubmissions .= $submission->text;
+            $allSubmissions .= "\n";
         }
-        $this->assertGreaterThan(10, strlen($allOrders));
+        $this->assertGreaterThan(10, strlen($allSubmissions));
 
-        $response = $this->actingAs($user)->get('/games/2/orders');
+        $response = $this->actingAs($user)->get('/games/2/submissions');
 
-        $response->assertStatus(200)->assertSee($allOrders);
+        $response->assertStatus(200)->assertSee($allSubmissions);
     }
 
-    public function testDownloadUnauthorizedOrders()
+    public function testDownloadUnauthorizedSubmissions()
     {
         $this->seed();
         $user = User::find(2);
@@ -152,7 +152,7 @@ class GameStatusTest extends TestCase
         $game = Game::find(2);
         $this->assertNotEquals($game->user_id, $user->id);
 
-        $response = $this->actingAs($user)->get('/games/2/orders');
+        $response = $this->actingAs($user)->get('/games/2/submissions');
 
         $response->assertStatus(403);
     }

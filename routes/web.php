@@ -26,8 +26,8 @@ Route::middleware('auth')->group(function () {
     Route::get('/games/{id}/confirm_delete', 'GameController@confirm_delete');
     Route::post('/games/{id}/manage', 'GameController@manage');
     Route::resource('games', 'GameController');
-    Route::resource('games.orders', 'GameOrderController', [
+    Route::resource('games.submissions', 'GameSubmissionController', [
         'index'
     ]);
-    Route::resource('factions.orders', 'FactionOrderController');
+    Route::resource('factions.submissions', 'FactionSubmissionController');
 });

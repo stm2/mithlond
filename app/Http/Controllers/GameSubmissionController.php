@@ -2,15 +2,15 @@
 namespace App\Http\Controllers;
 
 use App\Game;
-use App\Order;
+use App\Submission;
 use Illuminate\Http\Request;
 
-class GameOrderController extends Controller
+class GameSubmissionController extends Controller
 {
 
     public function __construct()
     {
-        $this->authorizeResource(Order::class, 'order');
+        $this->authorizeResource(Submission::class, 'submission');
     }
 
     /**
@@ -20,11 +20,11 @@ class GameOrderController extends Controller
      */
     public function index(Request $request, Game $game)
     {
-        $this->authorize('viewAny', $game->orders->first());
+        $this->authorize('viewAny', $game->submissions->first());
 
-        return response()->view('orders_download', [
+        return response()->view('submissions_download', [
             'game' => $game,
-            'orders' => $game->orders()
+            'submissions' => $game->submissions()
                 ->get()
         ])
             ->header('Content-Type', 'text/plain');
@@ -54,10 +54,10 @@ class GameOrderController extends Controller
     /**
      * Display the specified resource.
      *
-     * @param \App\Order $order
+     * @param \App\Submission $submission
      * @return \Illuminate\Http\Response
      */
-    public function show(Order $order)
+    public function show(Submission $submission)
     {
         //
     }
@@ -65,10 +65,10 @@ class GameOrderController extends Controller
     /**
      * Show the form for editing the specified resource.
      *
-     * @param \App\Order $order
+     * @param \App\Submission $submission
      * @return \Illuminate\Http\Response
      */
-    public function edit(Order $order)
+    public function edit(Submission $submission)
     {
         //
     }
@@ -77,10 +77,10 @@ class GameOrderController extends Controller
      * Update the specified resource in storage.
      *
      * @param \Illuminate\Http\Request $request
-     * @param \App\Order $order
+     * @param \App\Submission $submission
      * @return \Illuminate\Http\Response
      */
-    public function update(Request $request, Order $order)
+    public function update(Request $request, Submission $submission)
     {
         //
     }
@@ -88,10 +88,10 @@ class GameOrderController extends Controller
     /**
      * Remove the specified resource from storage.
      *
-     * @param \App\Order $order
+     * @param \App\Submission $submission
      * @return \Illuminate\Http\Response
      */
-    public function destroy(Order $order)
+    public function destroy(Submission $submission)
     {
         //
     }
