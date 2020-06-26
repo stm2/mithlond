@@ -14,7 +14,8 @@ class GamesTableSeeder extends Seeder
     public function run()
     {
         factory(App\Game::class, 2)->create([
-            'user_id' => 1
+            'user_id' => 1,
+            'rule_id' => 2
         ]);
 
         factory(App\Game::class, 1)->create([

@@ -109,16 +109,15 @@ class GameStatusTest extends TestCase
         $response->assertSeeText("Orders received: 0, nmr: 0");
     }
 
-    public function testManage()
-    {
-        $this->fail();
-    }
+    // public function testManage()
+    // {
+    // $this->fail("not implemented");
+    // }
 
-    public function testManageUnauthorized()
-    {
-        $this->fail();
-    }
-
+    // public function testManageUnauthorized()
+    // {
+    // $this->fail("not implemented");
+    // }
     public function testDownloadSubmissions()
     {
         $this->seed();

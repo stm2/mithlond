@@ -12,6 +12,10 @@ $factory->define(Game::class, function (Faker $faker) {
             return App\User::inRandomOrder()->first()->id;
         },
         'url' => $faker->url,
-        'email' => $faker->email
+        'email' => $faker->email,
+        'rule_id' => function () {
+            $rule = App\Rule::first();
+            return is_null($rule) ? null : $rule->id;
+        }
     ];
 });

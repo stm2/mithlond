@@ -5,7 +5,10 @@ use App\Faction;
 use App\Game;
 use App\Submission;
 use Illuminate\Http\Request;
+use Illuminate\Support\Str;
 use Illuminate\Support\Facades\Auth;
+use App\Rules\ComposedRegexp;
+use App\Rules\StartEndRegexp;
 
 class FactionSubmissionController extends Controller
 {
@@ -52,7 +55,8 @@ class FactionSubmissionController extends Controller
      */
     public function store(Request $request, Faction $faction)
     {
-        $data = $this->validateSubmission($request);
+        $data = $this->validateSubmission($request, $faction->game()
+            ->first());
 
         $submission = new Submission($data);
         $submission->faction_id = $faction->id;
@@ -113,10 +117,32 @@ class FactionSubmissionController extends Controller
         return "destroy";
     }
 
-    protected function validateSubmission(Request $request)
+    protected function validateSubmission(Request $request, Game $game)
     {
-        return $request->validate([
-            'text' => 'required'
-        ]);
+        $rule = json_decode($game->rule()->first()->options, true);
+        if ($rule['type'] == 'REGEXP_COMPOSE') {
+
+            return $request->validate([
+                'text' => [
+                    'required',
+                    new ComposedRegexp($rule)
+                ]
+            ]);
+        } else if ($rule['type'] == 'START_END_REGEXP') {
+            $validator = new StartEndRegexp($rule);
+
+            return $request->validate([
+                'text' => [
+                    'required',
+                    $validator
+                ]
+            ]);
+        } else if ($rule['type'] == 'NONE') {
+            return $request->validate([
+                'text' => 'required'
+            ]);
+        } else {
+            throw new \Exception('invalid order validation rule');
+        }
     }
 }

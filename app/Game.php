@@ -43,4 +43,9 @@ class Game extends Model
     {
         return $this->hasManyThrough('App\Submission', 'App\Faction');
     }
+
+    public function rule()
+    {
+        return $this->belongsTo('App\Rule');
+    }
 }
