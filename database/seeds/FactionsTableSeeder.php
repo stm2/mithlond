@@ -24,10 +24,13 @@ class FactionsTableSeeder extends Seeder
 
         $faker = Factory::create();
 
-        factory(App\Faction::class, 5)->create([
-            'game_id' => function () use ($faker) {
-                return $faker->numberBetween(3, User::count());
-            }
-        ]);
+        for ($i = 3; $i <= User::count(); ++ $i) {
+            factory(App\Faction::class, 3)->create([
+                'game_id' => function () use ($faker) {
+                    return $faker->numberBetween(3, User::count());
+                },
+                'user_id' => $i
+            ]);
+        }
     }
 }

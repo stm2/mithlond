@@ -14,9 +14,7 @@ use App\Http\Controllers\GameController;
  |
  */
 
-Route::get('/', function () {
-    return view('welcome');
-});
+Route::get('/', 'WelcomeController@index')->name('welcome');
 
 Auth::routes();
 
